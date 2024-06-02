@@ -1,0 +1,71 @@
+.more-details-first {
+  margin-top: 2rem;
+}
+
+.more-details-first li {
+  list-style: none;
+}
+
+.more-details-first .card {
+  padding: 2rem 4rem;
+}
+
+.more-details-first .details-img {
+  cursor: pointer;
+}
+
+.details-text-area h5 {
+  font-weight: 450;
+  padding: 0;
+  font-size: 1rem !important;
+}
+.details-text-area span {
+  font-weight: bold;
+}
+
+.contact-btn-fill {
+  padding: 0.7rem 1rem;
+  border-radius: 5px;
+  background-color: rgb(9, 59, 124);
+  color: white !important;
+  font-weight: 400;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  transition: all 0.5s ease-in-out;
+  -webkit-transition: all 0.5s ease-in-out;
+  -webkit-o-transition: all 0.5s ease-in-out;
+}
+
+.contact-btn-fill:hover {
+  background-color: rgb(1, 1, 39);
+}
+
+.contact-btn-blank {
+  padding: 0.7rem 1rem;
+  border-radius: 5px;
+  background-color: transparent;
+  color: rgb(9, 59, 124);
+  font-weight: 400;
+  font-size: 1rem;
+  border: 1px solid rgb(9, 59, 124);
+  letter-spacing: 1px;
+  transition: all 0.5s ease-in-out;
+  -webkit-transition: all 0.5s ease-in-out;
+  -webkit-o-transition: all 0.5s ease-in-out;
+}
+
+.contact-btn-blank:hover {
+  background-color: rgb(9, 59, 124);
+  color: white !important;
+}
+
+.more-details-second {
+  margin-top: 5rem;
+}
+.more-details-second .card {
+  padding: 2rem 4rem;
+}
+
+.more-details-second-text h5 {
+  font-weight: 600;
+}
