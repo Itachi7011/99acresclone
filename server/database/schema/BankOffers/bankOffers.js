@@ -2,26 +2,29 @@ const mongoose = require("mongoose");
 const { buffer } = require("stream/consumers");
 
 const BankOffersSchema = new mongoose.Schema({
-  bankOfferName: {
+  bankName: {
     type: String,
   },
-  bankOfferDetails: {
+  tenure: {
     type: String,
   },
-  applyOnBank: {
+  processingFees: {
     type: String,
   },
   rateOfInterest: {
     type: Number,
   },
-  startingFrom: {
+  prepaymentCharges: {
     type: String,
-    // type = Data in input tag
   },
-  endedOn: {
+  loanAmount: {
     type: String,
-        // type = Data in input tag
-  }, logo: {
+  },
+  foreclosureCharges: {
+    type: String,
+  },
+
+  logo: {
     data: String,
     contentType: String,
   },

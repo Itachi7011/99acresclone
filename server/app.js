@@ -24,6 +24,7 @@ app.use(cors());
 
 const NewUserDB = require("./database/schema/users/userRegistration");
 const LikedPropertyDB = require("./database/schema/users/likeProperties");
+const LikedProjectsDB = require("./database/schema/users/likedProjects");
 const PropertyListDB = require("./database/schema/properties/properties");
 const ProjectDB = require("./database/schema/projects/newProject");
 const DeveloperDB = require("./database/schema/developer/developer");
@@ -47,6 +48,8 @@ const BannerDB = require("./database/schema/banner");
 const ArticlesDB = require("./database/schema/article");
 const NewsDB = require("./database/schema/news");
 const EventsDB = require("./database/schema/event");
+
+const EnquiryDB = require("./database/schema/enquiries");
 
 app.get("/", (req, res) => {
   res.send("Working");
@@ -96,12 +99,42 @@ const upload2 = multer({
   { name: "floorPlanImages", maxCount: 5 }, // Allow up to 1 floor image
 ]);
 
+// upload 3
+
+const storage3 = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "../client/src/Components/Uploads/Projects");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const upload3 = multer({
+  storage: storage3,
+
+  limits: {
+    fileSize: 10 * 1024 * 1024, // Limit file size to 10MB
+  },
+
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+      // Allow only image files
+
+      return cb(new Error("Please upload an image (JPG, JPEG or PNG)."));
+    }
+
+    cb(null, true);
+  },
+}).fields([{ name: "projectImage", maxCount: 5 }]);
+
 app.post("/newUserRegistration", async (req, res) => {
   try {
     const Email = req.body.email;
     const Password = req.body.password;
     const Cpassword = req.body.cpassword;
-    console.log(Email);
+    console.log("Password Is : ",Password);
+    console.log("CPassword Is : ",Cpassword);
 
     const OTP = Math.floor(Math.random() * 1000000 + 1);
     const Transport = async (email, Subject, Text) => {
@@ -134,9 +167,12 @@ app.post("/newUserRegistration", async (req, res) => {
         "Please use this OTP to verify your 99acres account",
         ` Your OTP is : ${OTP}`
       );
+     const Name =  `${req.body.lastName} ${req.body.lastName}`;
+     
       const userData = await new NewUserDB({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
+        name: Name,
         email: req.body.email,
         phoneNo: req.body.phoneNo,
         userType: req.body.userType,
@@ -158,7 +194,7 @@ app.post("/newUserRegistration", async (req, res) => {
       await userData.save();
       console.log("Saved in Database Successfully");
 
-      res.redirect("/UserLogin");
+      res.redirect("/Login");
     } else {
       res.send(
         "Sorry Password and Confirm Password Don't Match, Please Try Again!"
@@ -446,28 +482,30 @@ app.post("/postNewProperty", upload2, async (req, res) => {
   }
 });
 
-app.post("/add-new-project", (req, res) => {
-  try {
-    console.log("data is : ", req.body.project_specification);
-  } catch (e) {
-    console.log("Error is :", e);
-  }
-});
+// app.post("/add-new-project", (req, res) => {
+//   try {
+//     console.log("data is : ", req.body);
+//   } catch (e) {
+//     console.log("Error is :", e);
+//   }
+// });
 app.post(
-  "/add-new-project1",
-  // upload1.fields([
-  //   { name: "logoImage" },
-  //   [{ name: "projectImage" }],
-  //   { name: "floorPlanImage" },
-  //   { name: "pricePlanImage" },
-  //   { name: "paymentPlanImage" },
-  //   { name: "e_brochureImage" },
-  //   { name: "constructionUpdateImage" },
-  //   { name: "contactUsImage" },
-  // ]),
+  "/add-new-project",
+  upload1.fields([
+    { name: "logoImage" },
+    {name:"projectImage",maxCount: 5},
+    { name: "floorPlanImage" },
+    { name: "pricePlanImage" },
+    { name: "paymentPlanImage" },
+    { name: "e_brochureImage" },
+    { name: "constructionUpdateImage" },
+    { name: "contactUsImage" },
+  ]),
   async (req, res, next) => {
     try {
-      console.log("data is : ", req.body.project_name);
+      console.log("req.body is : ", req.body);
+      console.log("req.files is : ", req.files);
+
       const userData = await new ProjectDB({
         ownerName: req.body.ownerName,
         email: req.body.email,
@@ -476,7 +514,7 @@ app.post(
         projectListedBy: req.body.projectListedBy,
         projectType: req.body.projectType,
         project_name: req.body.project_name,
-        bank_offers: req.body.bank_offers,
+        bank_offers: JSON.parse(req.body.bank_offers),
         total_floors: req.body.total_floors,
         max_area: req.body.max_area,
         min_area: req.body.min_area,
@@ -484,81 +522,95 @@ app.post(
         developerName: req.body.developerName,
         type: String,
         title_text: req.body.title_text,
-        amenities: req.body.amenities,
-        meta_keyword: req.body.meta_keyword,
-        meta_description: req.body.meta_description,
+        amenities: JSON.parse(req.body.amenities),
+        metaKeyword: req.body.metaKeyword,
+        metaDescription: req.body.metaDescription,
         reserved_parking: req.body.reserved_parking,
-        // logoImage: {
-        //   data: req.files.logoImage[0].filename,
-        //     contentType: "image",
+        logoImage: {
+          data: req.files.logoImage[0].filename,
+          contentType: "image",
+        },
+        projectImage: req.files.projectImage.map((file) => ({
+          data: file.filename,
+
+          contentType: "image",
+        })),
+        // projectImage: {
+        //   data: req.files.projectImage[0].filename,
+        //   contentType: "image",
         // },
-        // projectImage: [{
-        //   data: req.files.projectImage[].filename,
-        //     contentType: "image",
-        // }],
-        // floorPlanImage: {
-        //   data: req.files.floorPlanImage[0].filename,
-        //     contentType: "image",
-        // },
-        // pricePlanImage: {
-        //   data: req.files.pricePlanImage[0].filename,
-        //     contentType: "image",
-        // },
-        // paymentPlanImage: {
-        //   data: req.files.paymentPlanImage[0].filename,
-        //     contentType: "image",
-        // },
-        // e_brochureImage: {
-        //   data: req.files.e_brochureImage[0].filename,
-        //     contentType: "image",
-        // },
-        // constructionUpdateImage: {
-        //   data: req.files.constructionUpdateImage[0].filename,
-        //     contentType: "image",
-        // },
-        // contactUsImage: {
-        //   data: req.files.contactUsImage[0].filename,
-        //     contentType: "image",
-        // },
+        floorPlanImage: {
+          data: req.files.floorPlanImage[0].filename,
+          contentType: "image",
+        },
+        pricePlanImage: {
+          data: req.files.pricePlanImage[0].filename,
+          contentType: "image",
+        },
+        paymentPlanImage: {
+          data: req.files.paymentPlanImage[0].filename,
+          contentType: "image",
+        },
+        e_brochureImage: {
+          data: req.files.e_brochureImage[0].filename,
+          contentType: "image",
+        },
+        constructionUpdateImage: {
+          data: req.files.constructionUpdateImage[0].filename,
+          contentType: "image",
+        },
+        contactUsImage: {
+          data: req.files.contactUsImage[0].filename,
+          contentType: "image",
+        },
         rera_approval: req.body.rera_approval,
         youtube_URL: req.body.youtube_URL,
         reg: req.body.reg,
         area: req.body.area,
+        isVerified: false,
+
+        projectFor: req.body.projectFor,
+        constructionTitle:req.body.constructionTitle,
+        constructionData:req.body.constructionData,
         totalAmount: req.body.totalAmount,
         posession_date: req.body.posession_date,
-        usp: req.body.usp,
-        direction_facing: req.body.direction_facing,
+        usp: JSON.parse(req.body.usp),
         featureProject: req.body.featureProject,
         age_of_property: req.body.age_of_property,
-        sellingStatus: req.body.sellingStatus,
         no_of_units: req.body.no_of_units,
         no_of_floor: req.body.no_of_floor,
         no_of_tower: req.body.no_of_tower,
         total_area: req.body.total_area,
         open_area: req.body.open_area,
         sellingStatus: req.body.sellingStatus,
-        property_specicification: req.body.property_specicification,
+        project_specification: req.body.project_specification,
         locationMap: req.body.locationMap,
         price: req.body.price,
         min_price: req.body.min_price,
         max_price: req.body.max_price,
         pricePlanDetails: req.body.pricePlanDetails,
         paymentPlanDetails: req.body.paymentPlanDetails,
+        constructionStatus: req.body.constructionStatus,
         masterPlan: req.body.masterPlan,
-        projectCity: req.body.projectCity,
-        projectCountry: req.body.projectCountry,
-        projectLocality: req.body.projectLocality,
-        projectSubLocality: req.body.projectSubLocality,
-        project_lane_address: req.body.project_lane_address,
-        propertySociety_Apartment_HouseNo: req.body.propertySubLocality,
+        city: req.body.city,
+        location: req.body.location,
+        sub_location: req.body.sub_location,
         contactUsDetails: req.body.contactUsDetails,
-        dateOfFormSubmission: req.body.dateOfFormSubmission,
+        specificationStatus:req.body.specificationStatus,
+        locationMapStatus:req.body.locationMapStatus,
+        masterPlanStatus:req.body.masterPlanStatus,
+        floorPlanStatus:req.body.floorPlanStatus,
+        pricePlanStatus:req.body.pricePlanStatus,
+        paymentPlanStatus:req.body.paymentPlanStatus,
+        e_brochureStatus:req.body.e_brochureStatus,
+        constructionUpdateStatus:req.body.constructionUpdateStatus,
+        contactUsStatus:req.body.contactUsStatus,
+        dateOfFormSubmission: new Date(),
       });
 
-      // await userData.save();
+      await userData.save();
       console.log("Saved in Database Successfully");
-
-      // res.redirect("/add-new-project");
+      res.send({ status: "Ok", data: "New Developer Details Saved." });
     } catch (err) {
       console.log("Error during Posting New Project is : ", err);
     }
@@ -602,6 +654,8 @@ app.post("/addLocality", async (req, res) => {
 });
 app.post("/addDeveloper", upload1.single("logo"), async (req, res) => {
   try {
+    // console.log(req.body);
+    // console.log(req.file);
     const userData = await new DeveloperDB({
       name: req.body.name,
       email: req.body.email,
@@ -618,7 +672,8 @@ app.post("/addDeveloper", upload1.single("logo"), async (req, res) => {
     });
     await userData.save();
     console.log("New Developer Added in Database Successfully");
-    res.redirect("/add-developer");
+    res.send({ status: "Ok", data: "New Developer Details Saved." });
+    // res.redirect("/add-developer");
   } catch (err) {
     console.log(err);
     res.redirect("/failure-message");
@@ -627,12 +682,13 @@ app.post("/addDeveloper", upload1.single("logo"), async (req, res) => {
 app.post("/addBankOffer", upload1.single("logo"), async (req, res) => {
   try {
     const userData = await new BankOfferDB({
-      bankOfferName: req.body.bankOfferName,
-      bankOfferDetails: req.body.bankOfferDetails,
-      applyOnBank: req.body.applyOnBank,
+      bankName: req.body.bankName,
+      tenure: req.body.tenure,
+      processingFees: req.body.processingFees,
       rateOfInterest: req.body.rateOfInterest,
-      startingFrom: req.body.startingFrom,
-      endedOn: req.body.endedOn,
+      prepaymentCharges: req.body.prepaymentCharges,
+      loanAmount: req.body.loanAmount,
+      foreclosureCharges: req.body.foreclosureCharges,
       logo: {
         data: req.file.filename,
         contentType: "image/png",
@@ -641,7 +697,7 @@ app.post("/addBankOffer", upload1.single("logo"), async (req, res) => {
     });
     await userData.save();
     console.log("New Bank Offer Added in Database Successfully");
-    res.redirect("/new-bank-offer");
+    res.send({ status: "Ok", data: "New Developer Details Saved." });
   } catch (err) {
     console.log(err);
     res.redirect("/failure-message");
@@ -671,9 +727,7 @@ app.post("/updateBankOffer", async (req, res) => {
   }
 });
 
-
 //  Deleting APIs started from here
-
 
 app.post("/deleteBankOffer", async (req, res) => {
   try {
@@ -689,12 +743,12 @@ app.post("/deleteBankOffer", async (req, res) => {
 });
 app.post("/deleteSelectedBankOffers", async (req, res) => {
   try {
-    const ObjectId = require('mongoose').Types.ObjectId;
+    const ObjectId = require("mongoose").Types.ObjectId;
     const ids = req.body.ids;
-    const objectIds = ids.map(id => new ObjectId(id));
+    const objectIds = ids.map((id) => new ObjectId(id));
 
     await BankOfferDB.deleteMany({
-      _id: { $in:  objectIds},
+      _id: { $in: objectIds },
     });
     console.log("Selected Bank Offers Deleted from Database Successfully");
     res.redirect("/view-bank-offers");
@@ -718,12 +772,12 @@ app.post("/deleteDeveloper", async (req, res) => {
 });
 app.post("/deleteSelectedDeveloper", async (req, res) => {
   try {
-    const ObjectId = require('mongoose').Types.ObjectId;
+    const ObjectId = require("mongoose").Types.ObjectId;
     const ids = req.body.ids;
-    const objectIds = ids.map(id => new ObjectId(id));
+    const objectIds = ids.map((id) => new ObjectId(id));
 
     await DeveloperDB.deleteMany({
-      _id: { $in:  objectIds},
+      _id: { $in: objectIds },
     });
     console.log("Selected Developers Deleted from Database Successfully");
     res.redirect("/view-developer-list");
@@ -747,12 +801,12 @@ app.post("/deleteBanners", async (req, res) => {
 });
 app.post("/deleteSelectedBanners", async (req, res) => {
   try {
-    const ObjectId = require('mongoose').Types.ObjectId;
+    const ObjectId = require("mongoose").Types.ObjectId;
     const ids = req.body.ids;
-    const objectIds = ids.map(id => new ObjectId(id));
+    const objectIds = ids.map((id) => new ObjectId(id));
 
     await BannerDB.deleteMany({
-      _id: { $in:  objectIds},
+      _id: { $in: objectIds },
     });
     console.log("Selected Banners Deleted from Database Successfully");
     res.redirect("/view-banner-list");
@@ -768,7 +822,9 @@ app.post("/deleteArticles", async (req, res) => {
       _id: req.body.id,
     });
     console.log("Article Deleted from Database Successfully");
-    res.redirect("/view-article-list");
+    res.send({ status: "OK", data: "Deleted" });
+
+    // res.redirect("/view-article-list");
   } catch (err) {
     console.log(err);
     res.redirect("/failure-message");
@@ -776,15 +832,16 @@ app.post("/deleteArticles", async (req, res) => {
 });
 app.post("/deleteSelectedArticles", async (req, res) => {
   try {
-    const ObjectId = require('mongoose').Types.ObjectId;
+    const ObjectId = require("mongoose").Types.ObjectId;
     const ids = req.body.ids;
-    const objectIds = ids.map(id => new ObjectId(id));
+    const objectIds = ids.map((id) => new ObjectId(id));
 
     await ArticlesDB.deleteMany({
-      _id: { $in:  objectIds},
+      _id: { $in: objectIds },
     });
     console.log("Selected Articles Deleted from Database Successfully");
-    res.redirect("/view-article-list");
+    res.send({ status: "OK", data: "Deleted" });
+    // res.redirect("/view-article-list");
   } catch (err) {
     console.log(err);
     res.redirect("/failure-message");
@@ -805,12 +862,12 @@ app.post("/deleteNews", async (req, res) => {
 });
 app.post("/deleteSelectedNews", async (req, res) => {
   try {
-    const ObjectId = require('mongoose').Types.ObjectId;
+    const ObjectId = require("mongoose").Types.ObjectId;
     const ids = req.body.ids;
-    const objectIds = ids.map(id => new ObjectId(id));
+    const objectIds = ids.map((id) => new ObjectId(id));
 
     await NewsDB.deleteMany({
-      _id: { $in:  objectIds},
+      _id: { $in: objectIds },
     });
     console.log("Selected News Deleted from Database Successfully");
     res.redirect("/view-news-list");
@@ -834,12 +891,12 @@ app.post("/deleteEvents", async (req, res) => {
 });
 app.post("/deleteSelectedEvents", async (req, res) => {
   try {
-    const ObjectId = require('mongoose').Types.ObjectId;
+    const ObjectId = require("mongoose").Types.ObjectId;
     const ids = req.body.ids;
-    const objectIds = ids.map(id => new ObjectId(id));
+    const objectIds = ids.map((id) => new ObjectId(id));
 
     await EventsDB.deleteMany({
-      _id: { $in:  objectIds},
+      _id: { $in: objectIds },
     });
     console.log("Selected Events Deleted from Database Successfully");
     res.redirect("/view-event-list");
@@ -849,15 +906,7 @@ app.post("/deleteSelectedEvents", async (req, res) => {
   }
 });
 
-
-
-
-
-
-
-
 //  Deleting APIs Ended here
-
 
 app.post(
   "/mainSettings",
@@ -899,7 +948,6 @@ app.post(
     }
   }
 );
-
 
 app.post("/addBanner", upload1.single("logo"), async (req, res) => {
   try {
@@ -948,15 +996,12 @@ app.post("/addArticle", upload1.single("articleImage"), async (req, res) => {
     });
     await userData.save();
     console.log("New Article Added in Database Successfully");
-    res.redirect("/new-article");
+    res.send({ status: "Ok", data: "New Article Details Saved." });
   } catch (err) {
     console.log(err);
     res.redirect("/failure-message");
   }
 });
-
-
-
 
 app.post("/addNews", upload1.single("image"), async (req, res) => {
   try {
@@ -985,7 +1030,6 @@ app.post("/addNews", upload1.single("image"), async (req, res) => {
   }
 });
 
-
 app.post("/addEvent", upload1.single("contentImage"), async (req, res) => {
   try {
     // console.log(req.file);
@@ -1009,7 +1053,7 @@ app.post("/addEvent", upload1.single("contentImage"), async (req, res) => {
     });
     await userData.save();
     console.log("New Event Added in Database Successfully");
-    res.redirect("/new-event");
+    res.send({ status: "Ok", data: "New Article Details Saved." });
   } catch (err) {
     console.log(err);
     res.redirect("/failure-message");
@@ -1165,14 +1209,7 @@ app.post("/changeOfficialRedditId", async (req, res) => {
   }
 });
 
-
-
-
 // Change Official Website Info. like Phone NO. Email, social media, etc Ends here
-
-
-
-
 
 // APIs Of Official Website Info. like Phone NO. Email, social media, etc Starts here
 app.get("/phoneNoAPI", async (req, res) => {
@@ -1246,10 +1283,7 @@ app.get("/EventsAPI", async (req, res) => {
   }
 });
 
-
-
 // APIs Of Official Website Info. like Phone NO. Email, social media, etc Ends here
-
 
 app.post("/editLocality", async (req, res) => {
   try {
@@ -1319,6 +1353,42 @@ app.post("/likeProperties", async (req, res) => {
     console.log(`Error during sending Liked Property -${err}`);
   }
 });
+
+app.post("/likedProject", async (req, res) => {
+  try {
+    const propertyId = req.body.id;
+
+    const userName = req.body.userName;
+
+    const localityData = await LikedProjectsDB.findOne({
+      id: propertyId,
+      userName: userName,
+    });
+    if (!localityData) {
+      const newLikedProperty = await new LikedProjectsDB({
+        id: propertyId,
+        userName: req.body.userName,
+        projectName: req.body.projectName,
+      });
+      await newLikedProperty.save();
+      console.log("Liked Project Saved in Database Successfully");
+      res.sendStatus(200);
+    } else {
+      console.log("Sorry Project already saved into liked property list");
+    }
+  } catch (err) {
+    console.log(`Error during sending Liked Project -${err}`);
+  }
+});
+app.get("/likedPropertyList", async (req, res) => {
+  try {
+    const data = await LikedPropertyDB.find();
+    res.send(data);
+  } catch (err) {
+    console.log(`Error during sending Localities List -${err}`);
+  }
+});
+
 app.get("/localitiesList", async (req, res) => {
   try {
     const data = await LocalitiesDB.find();
@@ -1336,6 +1406,17 @@ app.get("/PropertiesList", async (req, res) => {
     console.log(`Error during sending Properties List -${err}`);
   }
 });
+
+app.get("/ProjectsList", async (req, res) => {
+  try {
+    const data = await ProjectDB.find();
+
+    res.send(data);
+  } catch (err) {
+    console.log(`Error during sending Properties List -${err}`);
+  }
+});
+
 app.get("/bankOfferList", async (req, res) => {
   try {
     const data = await BankOfferDB.find();
@@ -1368,7 +1449,6 @@ app.get("/mainSettingsList", async (req, res) => {
     console.log(`Error during sending Residential Properties List -${err}`);
   }
 });
-
 
 app.post("/newBankOffer", async (req, res) => {
   try {
@@ -1572,6 +1652,25 @@ app.post("/submitFeedback", async (req, res) => {
 
     res.redirect("/postNewResidentialProperty");
   } catch (err) {
+    console.log(`Error during Feedback -${err}`);
+  }
+});
+
+app.post("/submitEnquiry", async (req, res) => {
+  try {
+    const EnquiryData = await new EnquiryDB({
+      name: req.body.name,
+      email: req.body.email,
+      projectId: req.body.projectId,
+      phoneNO: req.body.phoneNO,
+      dateOfFormSubmission: req.body.dateOfFormSubmission,
+    });
+
+    await EnquiryData.save();
+    console.log("New Enquiry Saved in Database Successfully");
+
+      res.send({ status: "Ok", data: "New Developer Details Saved." });
+    } catch (err) {
     console.log(`Error during Feedback -${err}`);
   }
 });
