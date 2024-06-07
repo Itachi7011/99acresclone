@@ -5874,17 +5874,19 @@ text-align: left;
   background: #ebecf0;
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, calc(100% - 54px) 50%);
   font-weight: 700;
-  font-size: 10px;
+  font-size: 15px;
   line-height: 16px;
   text-transform: uppercase;
   color: #091e42;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding-right: 12px;
+  /* padding-right: 12px;
   padding-left: 19px;
   padding-top: 2px;
-  padding-bottom: 2px;
+  padding-bottom: 2px; */
+  padding: 1rem 1rem 1rem 1.5rem;
+
 }
 
 .tupleNew__mt16 {

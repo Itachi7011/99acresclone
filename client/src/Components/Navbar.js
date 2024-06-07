@@ -137,13 +137,13 @@ const Navbar = () => {
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#about">
-                      Commercial Projects
+                    <a class="nav-link" href="/property-list">
+                      Properties
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#services">
-                      Retail Spaces
+                    <a class="nav-link" href="/project-list">
+                      Projects
                     </a>
                   </li>
                   <li class="nav-item">
@@ -197,25 +197,16 @@ const Navbar = () => {
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/">
-                      Commercial Projects
+                    <a class="nav-link" href="property-list/">
+                       Properties
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/">
-                      Retail Spaces
+                    <a class="nav-link" href="/project-list">
+                      Projects
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/ Spaces">
-                      Office Spaces
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/">
-                      Studio Suites/ Apartments
-                    </a>
-                  </li>
+                  
                   <li class="nav-item">
                     <a class="nav-link" href="/Logout">
                       {user.name}
@@ -279,9 +270,9 @@ const Navbar = () => {
                 </li>
                 <li className="nav-item d-none d-sm-inline-block">
                   <a href="" className="nav-link">
-                    {phoneNo1.map(({phoneNo})=>{
+                    {phoneNo1.map(({phoneNo},index)=>{
                       return(<>
-                      {phoneNo}
+                      (<span key={index}>{phoneNo}</span>)
                       </>)
                     })}
 
@@ -290,9 +281,9 @@ const Navbar = () => {
                 </li>
                 <li className="nav-item d-none d-sm-inline-block">
                   <a href="" className="nav-link">
-                  {Email1.map(({email})=>{
+                  {Email1.map(({email}, id)=>{
                       return(<>
-                      {email}
+                      (<span key={ id}>{email}</span>)
                       </>)
                     })}
                   </a>
@@ -497,7 +488,9 @@ const Navbar = () => {
       } else if (
         user.userType === "buyer" ||
         user.userType === "Agent" ||
-        user.userType === "Developer"
+        user.userType === "Developer" || 
+        user.userType === "Indivisual Buyer/Seller" 
+
       ) {
         return (
           <>

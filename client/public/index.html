@@ -15,6 +15,9 @@
       integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
       crossorigin="anonymous"
     ></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>  
+
     <script src="semantic/dist/semantic.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -83,6 +86,8 @@
     <link rel="stylesheet" href="./css/propertyPage.css" />
     <link rel="stylesheet" href="./css/styles2.css" />
     <link rel="stylesheet" href="./css/PropertyProfile.css" />
+    <link rel="stylesheet" href="./css/viewProject.css" />
+
 
 <!-- <link rel="stylesheet" href="./css1/admin.css" />
     <link rel="stylesheet" href="./css1/animate-1.css" />
@@ -160,6 +165,17 @@
   src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
   crossorigin
 ></script>
+
+<script>
+  plugins: [
+    // other plugins,
+    new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery'
+    }),
+]
+</script>
 <script>
   $(document).ready(function(){
     $('.nav-item ').click(function(){
@@ -178,6 +194,7 @@
   }); 
 </script>
 
+
 <!-- <script src="https://unpkg.com/react-quill@1.3.3/dist/react-quill.js"></script>
 <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 <script type="text/babel" src="/my-scripts.js"></script>
@@ -189,18 +206,19 @@
 <script type="text/babel" src="./js/jquery-ui.js" ></script>
 <script type="text/babel" src="./js/jquery.js" ></script>
 <script type="text/babel" src="./js/jquery.matchHeight-min.js" ></script>
-<script type="text/babel" src="./js/jquery.min.js" ></script>
 <script type="text/babel" src="./js/jquery.nicescroll.js" ></script>
 <script type="text/babel" src="./js/jquery.prettyPhoto.js" ></script>
 <script type="text/babel" src="./js/jssor.slider.min.js" ></script>
 <script type="text/babel" src="./js/materialize.js" ></script>
 <script type="text/babel" src="./js/materialize.min.js" ></script>
 <script type="text/babel" src="./js/microphone.js" ></script>
-<script type="text/babel" src="./js/modernizr.custom.js" ></script>
+<script type="text/babel" src="./js/modernizr.custom.js" ></script>-->
+
 <script type="text/babel" src="./js/owl.carousel.min.js" ></script>
-<script type="text/babel" src="./js/propertySale.js" ></script>
+<script type="text/babel" src="./js/main.js" ></script>
+<!-- <script type="text/babel" src="./js/propertySale.js" ></script>
 <script type="text/babel" src="./js/seekbar.js" ></script>
-<script type="text/babel" src="./js/vegas.min.js" ></script> -->
+<script type="text/babel" src="./js/vegas.min.js" ></script>  -->
 
   </body>
 </html>

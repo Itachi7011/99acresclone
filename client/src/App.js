@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
+import 'owl.carousel/dist/assets/owl.carousel.css';  
+import 'owl.carousel/dist/assets/owl.theme.default.css';
 // import "./Navbar1.scss";
 /* The following line can be included in a src/App.scss */
 // import 'react-quill/dist/quill.snow.css';
@@ -30,7 +32,9 @@ import AdminCommercialPropertyProfile from "./Components/Admin/AdminPropertiesLi
 import EditCommercialPropertyProfile from "./Components/Admin/AdminPropertiesList/Profile/EditProfile/EditCommercialPropertyProfile";
 import AddToLuxuryProperty from "./Components/Admin/LuxuryProperty/AddToLuxuryProperty";
 import PropertyList from "./Components/PropertiesList/PropertyList";
+import ProjectList from "./Components/Projects/ProjectList";
 import PropertyProfile from "./Components/PropertiesList/PropertyProfile/PropertyProfile";
+import LIkedProperties from "./Components/Property/LIkedProperties";
 
 // Show Data To Admin
 
@@ -42,6 +46,10 @@ import EditSublocation from "./Components/Admin/AdminShowData/EditSublocation";
 
 import AddDeveloper from "./Components/Admin/Developer/AddDeveloper";
 import ViewAllDeveloper from "./Components/Admin/Developer/ViewAllDeveloper";
+
+// Categories Pages
+import Categories from "./Components/Admin/Categories/Categories";
+import ViewAllCategories from "./Components/Admin/Categories/ViewAllCategories";
 
 // Settings Pages
 
@@ -80,6 +88,7 @@ import ChangeTwitter from "./Components/Admin/SocialMediaInfo/ChangeTwitter";
 // Projects
 
 import AddNewproject from "./Components/Projects/AddNewproject";
+import ViewProject from "./Components/Projects/ViewProject";
 
 // Localities
 
@@ -110,7 +119,7 @@ import ReportError from "./Components/ReportError";
 import Feedback from "./Components/Feedback";
 
 //Temp
-import Signup from "./Components/NewUser//Signup/Signup";
+import Signup from "./Components/NewUser/Signup/Signup";
 import Signup1 from "./Components/NewUser/SignUp1/Signup";
 import Confirmation1 from "./Components/NewUser/SignUp1/Confirmation";
 import PersonalDetails1 from "./Components/NewUser/SignUp1/PersonalDetails";
@@ -161,11 +170,14 @@ function App() {
               element={<PreviousPostCommercialProperty />}
             />
             <Route path="/property-list" element={<PropertyList />} />
+            <Route path="/liked-properties" element={<LIkedProperties />} />
             <Route path="/property-profile" element={<PropertyProfile />} />
 
             {/* Projects */}
 
             <Route path="/add-new-project" element={<AddNewproject />} />
+            <Route path="/project-list" element={<ProjectList />} />
+            <Route path="/project-profile" element={<ViewProject />} />
 
             {/* Temp */}
             <Route path="/Signup" element={<Signup />} />
@@ -223,7 +235,10 @@ function App() {
             <Route path="/new-event" element={<Event />} />
             <Route path="/view-event-list" element={<ViewAllEvents />} />
 
+  {/* Categpries */}
 
+  <Route path="/add-new-category" element={<Categories />} />
+  <Route path="/view-category-list" element={<ViewAllCategories />} />
 
             {/* Social Media */}
 

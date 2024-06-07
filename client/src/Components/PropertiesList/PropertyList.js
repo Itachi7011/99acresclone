@@ -188,7 +188,7 @@ const PropertyList = () => {
           field.isVerified === true ||
           // (Math.floor(field.price) >= Math.floor(value[0]) &&
           //   Math.floor(field.price) <= Math.floor(value[1])) ||
-          field.isVrera_approvalerified === "available" ||
+          field.rera_approval === "available" ||
           // field.bhkNumber
 
           //   .toLowerCase()
@@ -320,6 +320,10 @@ const PropertyList = () => {
   // console.log(categories);
   console.log(value[0]);
   console.log(value[1]);
+
+  if (Data.emailVerification === false){
+    alert("Please Verify Your Account Using Email");
+  }
   return (
     <>
       <section id="section-body">
