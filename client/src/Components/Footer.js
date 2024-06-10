@@ -251,7 +251,8 @@ return(<>
                         </>
                       );
             }
-              else if (user.userType === "buyer" || user.userType === "Agent" || user.userType === "Developer") {
+              else if (user.userType === "buyer" || user.userType === "Agent" || user.userType === "Developer"|| 
+              user.userType === "Indivisual Buyer/Seller" ) {
               return (
                 <>
                   <GeneralFoooter />

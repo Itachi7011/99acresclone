@@ -103,7 +103,6 @@ const Navbar = () => {
     EmailDetails();
   }, []);
 
-  console.log(user.userType)
 
   const NoUserNavbar = () => {
     return (
@@ -204,6 +203,16 @@ const Navbar = () => {
                   <li class="nav-item">
                     <a class="nav-link" href="/project-list">
                       Projects
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/add-new-project">
+                     Add Projects
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/post-new-property">
+                     Add Property
                     </a>
                   </li>
                   
