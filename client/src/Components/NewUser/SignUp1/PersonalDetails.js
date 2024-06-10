@@ -129,16 +129,7 @@ const PersonalDetails = ({ prevStep, nextStep, handleChange, values }) => {
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField 
-                placeholder="Sub-locality"
-                label="Sub-locality"
-                onChange={handleChange('subLocality')}
-                defaultValue={values.subLocality}
-                autoComplete="Sub-locality"
-                fullWidth
-              />
-            </Grid>
+            
             <Grid item xs={12} sm={6}>
               <Button 
                 onClick={ Previous }

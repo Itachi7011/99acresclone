@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 import AddIcon from "@mui/icons-material/Add";
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import DateRangeIcon from "@mui/icons-material/DateRange";
@@ -25,6 +26,7 @@ import OtherHousesIcon from '@mui/icons-material/OtherHouses';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import DomainAddIcon from '@mui/icons-material/DomainAdd';
 import InstagramIcon from "@mui/icons-material/Instagram";
 import XIcon from "@mui/icons-material/X";
 import GroupIcon from "@mui/icons-material/Group";
@@ -108,7 +110,7 @@ const AdminSidebar = () => {
       <div
         class="hold-transition sidebar-mini layout-fixed"
         style={{ marginTop: "0rem", 
-        // zIndex: "20" 
+        zIndex: "-1" 
       }}
       >
         <aside
@@ -290,6 +292,42 @@ const AdminSidebar = () => {
                   </ul>
                 </li>
 
+                <li className="nav-item">
+                  <a href="#" className="nav-link">
+                  <DomainAddIcon />
+                    <p>
+                    Projects
+                      <i className="fas fa-angle-left right" />
+                      {/* <span className="badge badge-info right">6</span> */}
+                    </p>
+                  </a>
+                  <ul className="nav nav-treeview">
+                    <li className="nav-item">
+                      <a
+                        href="/post-new-property"
+                        className="nav-link"
+                      >
+                        <p>
+                          {" "}
+                          Add Project <AddIcon className="right" />
+                        </p>
+                      </a>
+                    </li>
+
+                    <li className="nav-item">
+                      <a
+                        href="/view-project"
+                        className="nav-link"
+                      >
+                        <p>
+                          Show All Projects{" "}
+                          <VisibilityIcon className="right" />
+                        </p>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                </li>
                 <li className="nav-item">
                   <a href="#" className="nav-link">
                     <LocationCityIcon className="" />
@@ -553,6 +591,60 @@ const AdminSidebar = () => {
                       </li>
                     </ul>
                   </li>
+
+                  <li className="nav-item">
+                    <a href="#" className="nav-link">
+                      <FestivalIcon className="" />
+                      <p>
+                        Pages
+                        <i className="fas fa-angle-left right" />
+                      </p>
+                    </a>
+                    <ul className="nav nav-treeview">
+                      <li className="nav-item">
+                        <a href="/add-new-page" className="nav-link">
+                          <p>
+                            Add Pages <AddIcon className="right" />
+                          </p>
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a href="/view-pages-list" className="nav-link">
+                          <p>
+                            View All Events{" "}
+                            <VisibilityIcon className="right" />
+                          </p>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+
+                  <li className="nav-item">
+                    <a href="#" className="nav-link">
+                      <FormatListBulletedIcon className="" />
+                      <p>
+                        Categories
+                        <i className="fas fa-angle-left right" />
+                      </p>
+                    </a>
+                    <ul className="nav nav-treeview">
+                      <li className="nav-item">
+                        <a href="/add-new-category" className="nav-link">
+                          <p>
+                            Add Category <AddIcon className="right" />
+                          </p>
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a href="/view-category-list" className="nav-link">
+                          <p>
+                            View All Categories{" "}
+                            <VisibilityIcon className="right" />
+                          </p>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
                 <li className="nav-item">
                   <a href="#" className="nav-link">
                     <SettingsIcon className="" />
@@ -577,7 +669,7 @@ const AdminSidebar = () => {
                   <a href="#" className="nav-link">
                     <ContactPageIcon className="" />{" "}
                     <p>
-                      Website's Contact Info
+                       Contact Info
                       <i className="fas fa-angle-left right" />
                     </p>
                   </a>
@@ -722,7 +814,7 @@ const AdminSidebar = () => {
           </div>
           {/* /.sidebar */}
         </aside>
-        <div class="wrapper"></div>
+        <div class="wrapper" style={{zIndex:"-2"}}></div>
       </div>
     </>
   );

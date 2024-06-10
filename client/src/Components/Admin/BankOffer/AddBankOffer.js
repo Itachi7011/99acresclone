@@ -1,19 +1,27 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import {Helmet} from "react-helmet";
 
 const PostNewCommercialProperty = () => {
+  const navigate = useNavigate();
+
+  const [content, setContent] = useState("");
   const [Data, setData] = useState("");
   const [image, setImage] = useState("");
 
   let name, value;
   const [user, setUser] = useState({
-    bankOfferName: "",
-    bankOfferDetails: "",
-    applyOnBank: "",
+    bankName: "",
+    tenure: "",
+    processingFees: "",
+    loanAmount: "",
     rateOfInterest:"",
-    startingFrom: "",
-    endedOn: "",
+    prepaymentCharges: "",
+    foreclosureCharges: "",
     dateOfFormSubmission: "",
   });
   const UserDetails = async () => {
@@ -56,6 +64,67 @@ const PostNewCommercialProperty = () => {
       [name]: value,
     });
   };
+
+  const handleSubmit = async (e) => {
+
+    e.preventDefault();
+
+
+
+    var bodyFormData = new FormData();
+
+    bodyFormData.append("bankName", user.bankName);
+
+    bodyFormData.append("tenure",user.tenure);
+
+    bodyFormData.append("processingFees", user.processingFees);
+
+    bodyFormData.append("loanAmount", user.loanAmount);
+
+    bodyFormData.append("rateOfInterest", user.rateOfInterest);
+    bodyFormData.append("prepaymentCharges", user.prepaymentCharges);
+
+    bodyFormData.append("logo", image);
+
+    bodyFormData.append("foreclosureCharges", user.foreclosureCharges);
+
+
+
+    try {
+
+      const response = await axios.post(
+
+        "/addBankOffer",
+
+        bodyFormData,
+
+
+        {
+
+          headers: {
+
+            "Content-Type": "multipart/form-data",
+
+          },
+
+        }
+
+      );
+      alert("New Bank Offer added Successfully");
+
+      // request successful, refresh the page
+
+      window.location.reload();
+
+    } catch (error) {
+
+      //handle error
+
+      console.log(error);
+
+    }
+
+  };
   
   if (Data.userType !== "admin") {
 
@@ -93,25 +162,29 @@ const PostNewCommercialProperty = () => {
                   borderRadius: "5px",
                 }}
               >
+
                 <div className="row">
                   <div className="col-12 col-lg-2 mt-2 ">
                     <h6 style={{ marginBottom: "3.2rem", fontSize: "1rem" }}>
-                      Bank Offer Name :
+                      Bank Name :
                     </h6>
                     <h6 style={{ marginBottom: "3rem", fontSize: "1rem" }}>
-                    Bank Offer Details :
+                    Tenure :
                     </h6>
-                    <h6 style={{ marginBottom: "2.8rem", fontSize: "1rem" }}>
-                      Apply On Bank :
+                    <h6 style={{ marginBottom: "2.3rem", fontSize: "1rem" }}>
+                      Processing Fees :
                     </h6>
-                    <h6 style={{ marginBottom: "2.8rem", fontSize: "1rem" }}>
+                    <h6 style={{ marginBottom: "2rem", fontSize: "1rem" }}>
                       Rate Of Interest (% Per Year):
                     </h6>
                     <h6 style={{ marginBottom: "2.8rem", fontSize: "1rem" }}>
-                    Starting From :
+                    Loan Amount :
                     </h6>
                     <h6 style={{ marginBottom: "2.8rem", fontSize: "1rem" }}>
-                      Ended On :
+                      Prepayment Charges :
+                    </h6>
+                    <h6 style={{ marginBottom: "2.8rem", fontSize: "1rem" }}>
+                      Foreclosure Charges :
                     </h6>
                     <h6 style={{ marginBottom: "2.8rem", fontSize: "1rem" }}>
                       Logo :
@@ -119,14 +192,10 @@ const PostNewCommercialProperty = () => {
                     
                   </div>
                   <div className="col-lg-8">
-                    <form
-                      action="/addBankOffer"
-                      method="post"
-                      encType="multipart/form-data"
-                    >
+                    
                       <input
                         type="text"
-                        name="bankOfferName"
+                        name="bankName"
                         style={{ fontWeight: "400" }}
                         onChange={inputHandler}
                         placeholder=""
@@ -134,7 +203,17 @@ const PostNewCommercialProperty = () => {
                       />
                       <input
                         type="text"
-                        name="bankOfferDetails"
+                        name="tenure"
+                        style={{ fontWeight: "400" }}
+                        onChange={inputHandler}
+                        placeholder=""
+                        className="form-control mb-4"
+                      />
+
+
+                      <input
+                        type="text"
+                        name="processingFees"
                         style={{ fontWeight: "400" }}
                         onChange={inputHandler}
                         placeholder=""
@@ -142,14 +221,6 @@ const PostNewCommercialProperty = () => {
                       />
                       <input
                         type="text"
-                        name="applyOnBank"
-                        style={{ fontWeight: "400" }}
-                        onChange={inputHandler}
-                        placeholder=""
-                        className="form-control mb-4"
-                      />
-                      <input
-                        type="number"
                         name="rateOfInterest"
                         style={{ fontWeight: "400" }}
                         onChange={inputHandler}
@@ -158,7 +229,7 @@ const PostNewCommercialProperty = () => {
                       />
                       <input
                         type="text"
-                        name="startingFrom"
+                        name="loanAmount"
                         style={{ fontWeight: "400" }}
                         onChange={inputHandler}
                         placeholder=""
@@ -166,7 +237,15 @@ const PostNewCommercialProperty = () => {
                       />
                       <input
                         type="text"
-                        name="endedOn"
+                        name="prepaymentCharges"
+                        style={{ fontWeight: "400" }}
+                        onChange={inputHandler}
+                        placeholder=""
+                        className="form-control mb-4"
+                      />
+                      <input
+                        type="text"
+                        name="foreclosureCharges"
                         style={{ fontWeight: "400" }}
                         onChange={inputHandler}
                         placeholder=""
@@ -188,7 +267,7 @@ const PostNewCommercialProperty = () => {
                       
                       <br />
                       <br />
-                      <button className="btn btn-primary me-4" type="submit">
+                      <button className="btn btn-primary me-4" onClick={handleSubmit}>
                         {" "}
                         Submit
                       </button>
@@ -196,7 +275,7 @@ const PostNewCommercialProperty = () => {
                         {" "}
                         Reset
                       </button>
-                    </form>
+                    
                   </div>
                 </div>
               </div>

@@ -236,7 +236,7 @@ const DevelopersList = () => {
                             <td>{email}</td>
                             <td>{phoneNo}</td>
 
-                            <td>{aboutDeveloper} %</td>
+                            <td dangerouslySetInnerHTML={{__html: aboutDeveloper}}></td>
                             <td>
                               <img
                                 src={require("../../Uploads/Projects/" +
